@@ -31,11 +31,9 @@ router.get("/api/workouts", (req, res) => {
     });
 });
 
-router.get("/exercise", (req, res) => {
+router.get("./exercise", (req, res) => {
   res
-    .sendFile("exercise.html", {
-      root: path.join(__dirname, "./"),
-    })
+    .sendFile(path.join(__dirname, "exercise.html"))
     .catch((err) => {
       res.status(400).json(err);
     });
