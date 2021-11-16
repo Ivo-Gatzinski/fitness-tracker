@@ -33,7 +33,7 @@ router.get("/api/workouts", (req, res) => {
 
 router.get("./exercise", (req, res) => {
   res
-    .sendFile(path.join(__dirname, "exercise.html"))    
+    .sendFile("../public/exercise.html");    
 });
 
 module.exports = router;
