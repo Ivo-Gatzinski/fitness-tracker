@@ -2,19 +2,12 @@ const router = require("express").Router();
 const Workout = require("../models/Workout.js");
 const path = require("path");
 
-router.post("/api/workouts", ({ body }, res) => {
-  Workout.create(body)
-    .then((workout) => {
+router.post("/api/workouts", async ({body}, res) => {
+  const workout = await Workout.create(body);
       res.json(workout);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
 });
 
 router.put("/api/workouts/:id", (req, res) => {
-  console.log(req.body);
-  console.log(req.params.id);
   Workout.updateOne(
     { _id: req.params.id },
     { $push: { exercises: req.body }}
@@ -28,7 +21,13 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 router.get("/api/workouts", (req, res) => {
-  Workout.find({})
+  Workout.aggregate(
+    [
+      { $addFields: {
+        totalDuration: { $sum: "$exercises.duration" }
+      }}
+    ]
+)
     .then((workout) => {
       res.json(workout);
     })
@@ -46,7 +45,13 @@ router.get("/stats", (req, res) => {
 });
 
 router.get("/api/workouts/range", (req, res) => {
-  Workout.find({})
+  Workout.aggregate(
+    [
+      { $addFields: {
+        totalDuration: { $sum: "$exercises.duration" }
+      }}
+    ]
+)
     .then((workout) => {
       res.json(workout);
     })
